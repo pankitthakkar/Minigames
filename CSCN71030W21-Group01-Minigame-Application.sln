@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TermMiniGamesLibraryV1", "TermMiniGamesLibraryV1\TermMiniGamesLibraryV1.vcxproj", "{ED9BE003-C81F-481A-B42B-EC9BFC247E16}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TermMiniGamesLibraryV1-Tests", "TermMiniGamesLibraryV1-Tests\TermMiniGamesLibraryV1-Tests.vcxproj", "{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{ED9BE003-C81F-481A-B42B-EC9BFC247E16}.Release|x64.Build.0 = Release|x64
 		{ED9BE003-C81F-481A-B42B-EC9BFC247E16}.Release|x86.ActiveCfg = Release|Win32
 		{ED9BE003-C81F-481A-B42B-EC9BFC247E16}.Release|x86.Build.0 = Release|Win32
+		{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}.Debug|x64.ActiveCfg = Debug|x64
+		{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}.Debug|x64.Build.0 = Debug|x64
+		{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}.Debug|x86.ActiveCfg = Debug|Win32
+		{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}.Debug|x86.Build.0 = Debug|Win32
+		{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}.Release|x64.ActiveCfg = Release|x64
+		{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}.Release|x64.Build.0 = Release|x64
+		{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}.Release|x86.ActiveCfg = Release|Win32
+		{CD3EEAA2-61F0-45C0-B2DA-A56E0BE77A09}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
