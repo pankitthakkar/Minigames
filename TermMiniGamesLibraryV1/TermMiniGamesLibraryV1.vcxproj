@@ -139,7 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="HangMan.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Minesweeper.h" />
+    <ClInclude Include="RPS.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.c" />
