@@ -3,12 +3,12 @@ Minigame application that will allow users to play Minesweeper, Rock Paper Sciss
 
 ## TODO:
   - [x] Make main 'skeleton' for program, that others will be building off.
-  - [ ] Create C test for modules that will be used throughout development for unit tresting.
+  - [X] Create C test for modules that will be used throughout development for unit tresting.
   - [ ] Have each of the three game modules begin getting coded, and main menu calls set up (but untestable until code is further on).
   - [ ] Finish integration of modules and prepare for source V1 release.
   
 ## Important Dates / Milestones:
-  1. March 19 -- Modules finished, begin integration
+  1. March 24 -- Modules finished, begin integration
   2. March 26 -- Integration finsihed, prepare for code release
   3. March 28 -- First code release
   4. April 18 -- Test report
@@ -21,6 +21,8 @@ Minigame application that will allow users to play Minesweeper, Rock Paper Sciss
 **Anthony Sasso
   * Basic minesweeper game of (A,1) style coordinates, will allow saving of scores for a user with file I/O.
   * There will also be (hopefully) the ability to have different difficulties, through selecting grid size and mine number... but will begin with a basic 8x8 before adding this.
+  * Will use the user account from the main program instead of a seperate user with a save/load function to save space. Should also simplify integration.
+  * Also may shorten the amount of functions I use to make testing more straight forewards...
 
 ### Rock Paper Scissors:
 **Zahra Amiri
