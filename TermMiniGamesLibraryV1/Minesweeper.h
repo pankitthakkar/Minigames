@@ -1,15 +1,32 @@
 #pragma once
 //Minesweeper header for tests / integration
-void RunMineSweeper(USER* inputUser);//this will be called in main and pass the user into it to save scores
 
-char** initalizeBoard(int XLength, int YLength);//initliaze board for new game
+typedef struct MinesweeperBoard {
+	int height;
+	int width;
 
-char** updateBoard(char** inputBoard, char xCoord, int yCoord);//gets user choice, first goes to checkInput then updates and returns board
+	int numOfMines;
+	int currentMines;
 
-bool checkInput(char** currentBoard, char xCoord, int yCoord);//checks input compared to current board and returns new board
+	int** currentBoard;
+	int** filledBoard;
 
-int playerWin(USER* inputUser);//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
+}MBoard;
 
-int playerLose();//returns choice of 0 error, 1 continue, 2 exit
+//void RunMineSweeper(USER* inputUser);//this will be called in main and pass the user into it to save scores
+
+bool initalizeBoard(MBoard* newBoard, char* difficulty);//initliaze board for new game
+
+void printBoard(MBoard printBoard); //top simplify job later on
+
+void printFinalBoard(MBoard printBoard);
+
+bool updateBoard(MBoard* gameBoard);//gets user choice, first goes to checkInput then updates and returns board
+
+bool checkInput(MBoard gameBoard);//checks input compared to current board and returns new board
+
+//int playerWin(USER* inputUser,MBoard* deleteBoard);//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
+
+int playerLose(MBoard* deleteBoard);//returns choice of 0 error, 1 continue, 2 exit
 
 int restartScreen();//restart screen seen after win or loss

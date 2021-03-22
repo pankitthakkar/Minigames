@@ -14,15 +14,15 @@ namespace TermMiniGamesLibraryV1Tests
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T0_01_)
 		{
 		}
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T0_02_)
 		{
 		}
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T0_03_)
 		{
 		}
 	};
@@ -31,15 +31,15 @@ namespace TermMiniGamesLibraryV1Tests
 	{
 	public:
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T01_01_)
 		{
 		}
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T01_02_)
 		{
 		}
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T01_03_)
 		{
 		}
 	};
@@ -48,15 +48,19 @@ namespace TermMiniGamesLibraryV1Tests
 	{
 	public:
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T02_01_Board_Initalization)//this test always return true.. will have to breakpoint through it to see :)
+		{
+			MBoard testBoard;
+			initalizeBoard(&testBoard, "easy");
+			printFinalBoard(testBoard);
+
+		}
+
+		TEST_METHOD(T02_02_)
 		{
 		}
 
-		TEST_METHOD(TestMethod1)
-		{
-		}
-
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T02_03_)
 		{
 		}
 	};
@@ -65,15 +69,15 @@ namespace TermMiniGamesLibraryV1Tests
 	{
 	public:
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T03_01_)
 		{
 		}
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T03_02_)
 		{
 		}
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(T03_03_)
 		{
 		}
 	};
