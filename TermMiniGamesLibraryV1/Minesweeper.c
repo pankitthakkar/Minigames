@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
+#include <time.h>
 #include "Main.h"
 #include "Minesweeper.h"
 #define EASYSIZE 9	//got difficulties form wikipedia...
@@ -172,22 +172,22 @@ void printFinalBoard(MBoard printBoard) {
 		}
 	}
 }
-bool updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkInput then updates and returns board
-
-}
-
-bool checkInput(MBoard currentBoard) {//checks input compared to current board and returns new board
-
-}
-
+//bool updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkInput then updates and returns board
+//
+//}
+//
+//bool checkInput(MBoard currentBoard) {//checks input compared to current board and returns new board
+//
+//}
+//
 //int playerWin(USER* inputUser,MBoard* deleteBoard) {//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
 //
 //}
-
-int playerLose(MBoard* deleteBoard) {//returns choice of 0 error, 1 continue, 2 exit
-
-}
-
-int restartScreen() {//restart screen seen after win or loss
-
-}
+//
+//int playerLose(MBoard* deleteBoard) {//returns choice of 0 error, 1 continue, 2 exit
+//
+//}
+//
+//int restartScreen() {//restart screen seen after win or loss
+//
+//}

@@ -145,8 +145,10 @@
     <ClInclude Include="RPS.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="HangMan.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="Minesweeper.c" />
+    <ClCompile Include="RPS.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
