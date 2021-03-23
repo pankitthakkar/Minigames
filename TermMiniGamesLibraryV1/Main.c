@@ -10,8 +10,12 @@
 
 //TODO for Integration / Main (Pankit): 
 	//
-
+#include "Minesweeper.h"
 int main(void) {
-	printf("hello world");
+	MBoard testBoard = initalizeBoard(9, 9, 10);
+	printCurrentBoard(testBoard);
+	printFinalBoard(testBoard);
+
+	printf("testdone\n");
 	return 0;
 }

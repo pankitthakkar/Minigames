@@ -4,49 +4,43 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Main.h"
+
 #include "Minesweeper.h"
-#define EASYSIZE 9	//got difficulties form wikipedia...
+#define EASYSIZE 11	//got difficulties form wikipedia...
 #define EASYMINE 10
-#define MEDSIZE 16
+#define MEDSIZE 18
 #define MEDMINE 40
-#define HARDSIZE 30
+#define HARDSIZE 32
 #define HARDMINE 99
+
 #define MINE -2
 #define UNINIT -1
 //void RunMineSweeper(USER* inputUser) {//this will be called in main and pass the user into it to save scores
 //
 //}
 
-MBoard initalizeBoard(const int xWidth, const int yHeight, int numOfMines) {//initliaze board for new game
+MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board for new game
 	srand(time(NULL));
 	int height;
 	int width;
-	MBoard newBoard = { 0 };
-	newBoard.filledBoard = (int**)malloc(xWidth * sizeof(int*));
-	for (int i = 0; i < yHeight; ++i) {
-		newBoard.filledBoard[i] = (int*)malloc(yHeight * sizeof(int));
-	}
-
-
-	newBoard.currentBoard = (int**)malloc(xWidth * sizeof(int*));
-	for (int i = 0; i < yHeight; ++i) {
-		newBoard.currentBoard[i] = (int*)malloc(yHeight * sizeof(int));
-	}
+	MBoard newBoard;
 
 	newBoard.numOfMines = numOfMines;//set values for mines, and numbers later
-	newBoard.width = xWidth; 
+	newBoard.currentMines = 0;
+	newBoard.width = xWidth;
 	newBoard.height = yHeight;
 	
-	for (int y = 0; y < newBoard.height; y++) {
-		for (int x = 0; x < newBoard.height; x++) {
+	for (int y = 0; y < MAXBOARD; y++) {
+		for (int x = 0; x < MAXBOARD; x++) {
 			newBoard.filledBoard[x][y] = UNINIT;//0 == uninitalized for count later
 			newBoard.currentBoard[x][y] = UNINIT;
 		}
 	}
+
 	while (newBoard.currentMines < newBoard.numOfMines) {// -1 == mine on spot
-		height = rand() % newBoard.height;
-		width = rand() % newBoard.width;
-		if (0 != (newBoard.filledBoard[width][height])) {//if mine is already there skip and try again
+		height = rand() % (newBoard.height+1)+1;
+		width = rand() % (newBoard.width+1)+1;
+		if (MINE != (newBoard.filledBoard[width][height])) {//if mine is already there skip and try again
 			newBoard.filledBoard[width][height] = MINE;
 			newBoard.currentMines++;
 		}
@@ -62,15 +56,15 @@ MBoard initalizeBoard(const int xWidth, const int yHeight, int numOfMines) {//in
 		y+1		[x-1][y+1]	[x][y+1]	[x+1][y+1]
 
 	*/
-	for (int y = 0; y < newBoard.width; y++) {
-		for (int x = 0; x < newBoard.height; x++) {
+	for (int y = 1; y < newBoard.width+1; y++) {
+		for (int x = 1; x < newBoard.height+1; x++) {
 			if (MINE != newBoard.filledBoard[x][y]) {
 				newBoard.filledBoard[x][y] = 0;//redundant but good in case
 			}
 			if ((MINE == newBoard.filledBoard[x][y - 1]) && MINE != newBoard.filledBoard[x][y]) {//up
 				newBoard.filledBoard[x][y]++;
 			}
-			if ((MINE == newBoard.filledBoard[x - 1][y - 1]) && MINE != newBoard.filledBoard[x][y]) {//up and left
+			if ((MINE == newBoard.filledBoard[x - 1][y - 1]) && MINE != newBoard.filledBoard[x][y]) {//up and left		//access violation reading location due to left or up of first pos == nothing...
 				newBoard.filledBoard[x][y]++;
 			}
 			if ((MINE == newBoard.filledBoard[x - 1][y]) && MINE != newBoard.filledBoard[x][y]) {//left
@@ -110,14 +104,19 @@ MBoard initalizeBoard(const int xWidth, const int yHeight, int numOfMines) {//in
 		[8] == 8 mines around it
 */
 void printCurrentBoard(MBoard printBoard) {
-	for (int i = 0; i < printBoard.width; i++) {
-		printf("[%d]\t", i);
+	for (int i = 0; i < printBoard.width + 1; i++) {
+		if (0 == i) {
+			printf("[-]\t");
+		}
+		else {
+			printf("[%d]\t", i);
+		}
 	}
 	printf("\n\n");
 
-	for (int y = 0; y < printBoard.height; y++) {
+	for (int y = 1; y < printBoard.height+1; y++) {
 		printf("[%d]\t", y);
-		for (int x = 0; x < printBoard.width; x++) {
+		for (int x = 1; x < printBoard.width+1; x++) {
 			if (UNINIT == printBoard.currentBoard[x][y]) {
 				printf("[?]\t");
 			}
@@ -129,32 +128,41 @@ void printCurrentBoard(MBoard printBoard) {
 			}
 
 		}
+		printf("\n\n");
 	}
+	printf("\n\n");
 }
 void printFinalBoard(MBoard printBoard) {
-	for (int i = 0; i < printBoard.width; i++) {
-		printf("[%d]\t", i);
+	for (int i = 0; i < printBoard.width+1; i++) {
+		if (0 == i) {
+			printf("[-]\t");
+		}
+		else {
+			printf("[%d]\t", i);
+		}
 	}
 	printf("\n\n");
 
-	for (int y = 0; y < printBoard.height; y++) {
+	for (int y = 1; y < printBoard.height+1; y++) {
 		printf("[%d]\t", y);
-		for (int x = 0; x < printBoard.width; x++) {
-			if (MINE == printBoard.currentBoard[x][y]) {
+		for (int x = 1; x < printBoard.width+1; x++) {
+			if (MINE == printBoard.filledBoard[x][y]) {
 				printf("[M]\t");
 			}
-			else if (UNINIT == printBoard.currentBoard[x][y]) {
+			else if (UNINIT == printBoard.filledBoard[x][y]) {
 				printf("[?]\t");
 			}
 			//else if (0 == printBoard.currentBoard[x][y]) {
 			//	printf("[0]\t");//just in case 0 is weird
 			//}
 			else {
-				printf("[%d]\t", printBoard.currentBoard[x][y]);
+				printf("[%d]\t", printBoard.filledBoard[x][y]);
 			}
 
 		}
+		printf("\n\n");
 	}
+	printf("\n\n");
 }
 //bool updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkInput then updates and returns board
 //
@@ -175,14 +183,3 @@ void printFinalBoard(MBoard printBoard) {
 //int restartScreen() {//restart screen seen after win or loss
 //
 //}
-void deleteBoard(MBoard* deleteBoard) {
-	for (int i = 0; i < deleteBoard->height; ++i) {
-		free(deleteBoard->filledBoard[i]);
-	}
-	free(deleteBoard->filledBoard);
-
-	for (int i = 0; i < deleteBoard->height; ++i) {
-		free(deleteBoard->currentBoard[i]);
-	}
-	free(deleteBoard->currentBoard);
-}
