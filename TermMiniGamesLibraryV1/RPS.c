@@ -14,7 +14,7 @@ bool startGame()
 	{
 		//exit the game
 		keepPlaying = false;
-	}
+	} 
 	else
 	{
 
