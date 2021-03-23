@@ -11,15 +11,6 @@
 //TODO for Integration / Main (Pankit): 
 	//
 
-struct User
-{
-    char username[10];
-    char password;
-    int minesweeper_highscore;
-    int hangman_highscore;
-    int RPS_highscore;
-};
-
 int main(void) {
 	return 0;
 }
