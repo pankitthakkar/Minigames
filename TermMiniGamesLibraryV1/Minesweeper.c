@@ -17,54 +17,38 @@
 //
 //}
 
-bool initalizeBoard(MBoard* newBoard, char* difficulty) {//initliaze board for new game
+MBoard initalizeBoard(const int xWidth, const int yHeight, int numOfMines) {//initliaze board for new game
 	srand(time(NULL));
 	int height;
 	int width;
-
-	if ("easy" == difficulty) {
-		newBoard->filledBoard = malloc(sizeof(int[EASYSIZE][EASYSIZE]));//set size of array
-		newBoard->currentBoard = malloc(sizeof(int[EASYSIZE][EASYSIZE]));
-
-		newBoard->numOfMines = EASYMINE;//set values for mines, and numbers later
-		newBoard->width = EASYSIZE; 
-		newBoard->height = EASYSIZE;
-
+	MBoard newBoard = { 0 };
+	newBoard.filledBoard = (int**)malloc(xWidth * sizeof(int*));
+	for (int i = 0; i < yHeight; ++i) {
+		newBoard.filledBoard[i] = (int*)malloc(yHeight * sizeof(int));
 	}
-	else if ("medium" == difficulty) {
-		newBoard->filledBoard = malloc(sizeof(int[MEDSIZE][MEDSIZE]));//set size of array
-		newBoard->currentBoard = malloc(sizeof(int[MEDSIZE][MEDSIZE]));
 
-		newBoard->numOfMines = MEDMINE;//set values for mines, and numbers later
-		newBoard->width = MEDSIZE;
-		newBoard->height = MEDSIZE;
 
+	newBoard.currentBoard = (int**)malloc(xWidth * sizeof(int*));
+	for (int i = 0; i < yHeight; ++i) {
+		newBoard.currentBoard[i] = (int*)malloc(yHeight * sizeof(int));
 	}
-	else if ("hard" == difficulty) {
-		newBoard->filledBoard = malloc(sizeof(int[MEDSIZE][HARDSIZE]));//set size of array
-		newBoard->currentBoard = malloc(sizeof(int[MEDSIZE][HARDSIZE]));
 
-		newBoard->numOfMines = HARDMINE;//set values for mines, and numbers later
-		newBoard->width = MEDSIZE; //so it fits better in case screen wraps
-		newBoard->height = HARDSIZE;
-
-	}
-	else if ("custom" == difficulty) {
-		
-
-	}
-	for (int y = 0; y < newBoard->height; y++) {
-		for (int x = 0; x < newBoard->height; x++) {
-			newBoard->filledBoard[x][y] = UNINIT;//0 == uninitalized for count later
-			newBoard->currentBoard[x][y] = UNINIT;
+	newBoard.numOfMines = numOfMines;//set values for mines, and numbers later
+	newBoard.width = xWidth; 
+	newBoard.height = yHeight;
+	
+	for (int y = 0; y < newBoard.height; y++) {
+		for (int x = 0; x < newBoard.height; x++) {
+			newBoard.filledBoard[x][y] = UNINIT;//0 == uninitalized for count later
+			newBoard.currentBoard[x][y] = UNINIT;
 		}
 	}
-	while (newBoard->currentMines < newBoard->numOfMines) {// -1 == mine on spot
-		height = rand() % newBoard->height;
-		width = rand() % newBoard->width;
-		if (0 != (newBoard->filledBoard[width][height])) {//if mine is already there skip and try again
-			newBoard->filledBoard[width][height] = MINE;
-			newBoard->currentMines++;
+	while (newBoard.currentMines < newBoard.numOfMines) {// -1 == mine on spot
+		height = rand() % newBoard.height;
+		width = rand() % newBoard.width;
+		if (0 != (newBoard.filledBoard[width][height])) {//if mine is already there skip and try again
+			newBoard.filledBoard[width][height] = MINE;
+			newBoard.currentMines++;
 		}
 	}
 	/*
@@ -78,38 +62,38 @@ bool initalizeBoard(MBoard* newBoard, char* difficulty) {//initliaze board for n
 		y+1		[x-1][y+1]	[x][y+1]	[x+1][y+1]
 
 	*/
-	for (int y = 0; y < newBoard->width; y++) {
-		for (int x = 0; x < newBoard->height; x++) {
-			if (MINE != newBoard->filledBoard[x][y]) {
-				newBoard->filledBoard[x][y] = 0;//redundant but good in case
+	for (int y = 0; y < newBoard.width; y++) {
+		for (int x = 0; x < newBoard.height; x++) {
+			if (MINE != newBoard.filledBoard[x][y]) {
+				newBoard.filledBoard[x][y] = 0;//redundant but good in case
 			}
-			if ((MINE == newBoard->filledBoard[x][y - 1]) && MINE != newBoard->filledBoard[x][y]) {//up
-				newBoard->filledBoard[x][y]++;
+			if ((MINE == newBoard.filledBoard[x][y - 1]) && MINE != newBoard.filledBoard[x][y]) {//up
+				newBoard.filledBoard[x][y]++;
 			}
-			if ((MINE == newBoard->filledBoard[x - 1][y - 1]) && MINE != newBoard->filledBoard[x][y]) {//up and left
-				newBoard->filledBoard[x][y]++;
+			if ((MINE == newBoard.filledBoard[x - 1][y - 1]) && MINE != newBoard.filledBoard[x][y]) {//up and left
+				newBoard.filledBoard[x][y]++;
 			}
-			if ((MINE == newBoard->filledBoard[x - 1][y]) && MINE != newBoard->filledBoard[x][y]) {//left
-				newBoard->filledBoard[x][y]++;
+			if ((MINE == newBoard.filledBoard[x - 1][y]) && MINE != newBoard.filledBoard[x][y]) {//left
+				newBoard.filledBoard[x][y]++;
 			}
-			if ((MINE == newBoard->filledBoard[x - 1][y + 1]) && MINE != newBoard->filledBoard[x][y]) {//down and left
-				newBoard->filledBoard[x][y]++;
+			if ((MINE == newBoard.filledBoard[x - 1][y + 1]) && MINE != newBoard.filledBoard[x][y]) {//down and left
+				newBoard.filledBoard[x][y]++;
 			}
-			if ((MINE == newBoard->filledBoard[x][y + 1]) && MINE != newBoard->filledBoard[x][y]) {//down
-				newBoard->filledBoard[x][y]++;
+			if ((MINE == newBoard.filledBoard[x][y + 1]) && MINE != newBoard.filledBoard[x][y]) {//down
+				newBoard.filledBoard[x][y]++;
 			}
-			if ((MINE == newBoard->filledBoard[x + 1][y + 1]) && MINE != newBoard->filledBoard[x][y]) {//down and right
-				newBoard->filledBoard[x][y]++;
+			if ((MINE == newBoard.filledBoard[x + 1][y + 1]) && MINE != newBoard.filledBoard[x][y]) {//down and right
+				newBoard.filledBoard[x][y]++;
 			}
-			if ((MINE == newBoard->filledBoard[x + 1][y]) && MINE != newBoard->filledBoard[x][y]) {//right
-				newBoard->filledBoard[x][y]++;
+			if ((MINE == newBoard.filledBoard[x + 1][y]) && MINE != newBoard.filledBoard[x][y]) {//right
+				newBoard.filledBoard[x][y]++;
 			}
-			if ((MINE == newBoard->filledBoard[x + 1][y - 1]) && MINE != newBoard->filledBoard[x][y]) {//up and right
-				newBoard->filledBoard[x][y]++;
+			if ((MINE == newBoard.filledBoard[x + 1][y - 1]) && MINE != newBoard.filledBoard[x][y]) {//up and right
+				newBoard.filledBoard[x][y]++;
 			}
 		}
 	}
-	return true;
+	return newBoard;
 }
 /*
 	Key for numbers on board
@@ -191,3 +175,14 @@ void printFinalBoard(MBoard printBoard) {
 //int restartScreen() {//restart screen seen after win or loss
 //
 //}
+void deleteBoard(MBoard* deleteBoard) {
+	for (int i = 0; i < deleteBoard->height; ++i) {
+		free(deleteBoard->filledBoard[i]);
+	}
+	free(deleteBoard->filledBoard);
+
+	for (int i = 0; i < deleteBoard->height; ++i) {
+		free(deleteBoard->currentBoard[i]);
+	}
+	free(deleteBoard->currentBoard);
+}

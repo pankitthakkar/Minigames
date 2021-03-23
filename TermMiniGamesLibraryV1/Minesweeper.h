@@ -15,7 +15,7 @@ typedef struct MinesweeperBoard {
 
 //void RunMineSweeper(USER* inputUser);//this will be called in main and pass the user into it to save scores
 
-bool initalizeBoard(MBoard* newBoard, char* difficulty);//initliaze board for new game
+MBoard initalizeBoard(const int xWidth, const int yHeight, int numOfMines);//initliaze board for new game
 
 void printBoard(MBoard printBoard); //top simplify job later on
 
@@ -30,3 +30,5 @@ void printFinalBoard(MBoard printBoard);
 //int playerLose(MBoard* deleteBoard);//returns choice of 0 error, 1 continue, 2 exit
 //
 //int restartScreen();//restart screen seen after win or loss
+
+void deleteBoard(MBoard* deleteBoard);
