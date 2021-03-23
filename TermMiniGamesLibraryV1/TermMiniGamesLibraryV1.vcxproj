@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Main.c" />
     <ClCompile Include="Minesweeper.c" />
+    <ClCompile Include="RPS.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
