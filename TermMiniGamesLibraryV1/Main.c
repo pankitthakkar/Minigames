@@ -10,7 +10,17 @@
 
 //TODO for Integration / Main (Pankit): 
 	//
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "Minesweeper.h"
+#include "Main.h"
+
 int main(void) {
+	USER* testUser = (USER*) malloc(sizeof(USER));
+	strcpy_s(testUser->username,(sizeof(char)*9),"testName");
+	testUser->minesweeper_highscore = 10;
+	RunMineSweeper(testUser);
+	free(testUser);
 	return 0;
 }

@@ -51,9 +51,6 @@ namespace TermMiniGamesLibraryV1Tests
 		TEST_METHOD(T02_01_Board_Initalization)//this test always return true.. will have to breakpoint through it to see :)
 		{
 			
-			
-			MBoard testBoard = initalizeBoard(9, 9, 10);
-			printFinalBoard(testBoard);
 		}
 
 		TEST_METHOD(T02_02_)

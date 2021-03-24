@@ -12,7 +12,9 @@ typedef struct MinesweeperBoard {
 	int filledBoard[MAXBOARD][MAXBOARD];
 
 }MBoard;
-//void RunMineSweeper(USER* inputUser);//this will be called in main and pass the user into it to save scores
+void startGame(USER* inputUser);//actual game called by runMineSweeper
+
+void RunMineSweeper(USER* inputUser);//this will be called in main and pass the user into it to save scores
 
 MBoard initalizeBoard(int xWidth, int yHeight, int numOfMines);//initliaze board for new game
 

@@ -3,29 +3,87 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
-#include "Main.h"
 
+#include "Main.h"
 #include "Minesweeper.h"
+
 #define EASYSIZE 11	//got difficulties form wikipedia...
 #define EASYMINE 10
+
 #define MEDSIZE 18
 #define MEDMINE 40
+
 #define HARDSIZE 32
 #define HARDMINE 99
 
+#define MAXINPUT 7
 #define MINE -2
 #define UNINIT -1
-void RunMineSweeper() {//this will be called in main and pass the user into it to save scores
-	char* name="testName";
-	int score=0;
-	printf("Welcome %s to Minesweeper\n",name);
-	
+void startGame(USER* inputUser) {
+	printf("Enter one of the following options (case sensitive)\n");
+	printf("EASY - Width 09, Height 09, 10 mines\n");
+	printf("MEDIUM - Width 16, Height 16, 40 mines\n");
+	printf("HARD - Width 16, Height 30, 99 mines\n");
+	printf("CUSTOM - (up to max of) Width 30, Height 60, 1000 mines\n");
+	bool loop = true;
+	int inputWidth = 0;
+	int inputHeight = 0;
+	int inputMineNum = 0;
+	while (true == loop) {
+		printf("\nNew Game selected, select difficulty name:");
+		char optionChoice[MAXINPUT];
+		scanf_s("%s", optionChoice, MAXINPUT - 1);
+		if ("EASY" == optionChoice) {//set to easy and exit loop
+			inputWidth = EASYSIZE;
+			inputHeight = EASYSIZE;
+			inputMineNum = EASYMINE;
+			loop = false;
+		}
+		else if ("MEDIUM" == optionChoice) {//set to med and exit loop
+			inputWidth = MEDSIZE;
+			inputHeight = MEDSIZE;
+			inputMineNum = MEDMINE;
+			loop = false;
+		}
+		else if ("HARD" == optionChoice) {//set to hard and exit loop
+			inputWidth = MEDSIZE;
+			inputHeight = HARDSIZE;
+			inputMineNum = HARDMINE;
+			loop = false;
+		}
+		else if ("CUSTOM" == optionChoice) {//ask for custom and continue if within bounds
+			printf("enter options as: Width Height Mines\n:");
+			int buffer=0;
+			printf("input width (max of 50):");
+			scanf_s("%d", &buffer,MAXINPUT);
+			inputWidth;
+			inputHeight;
+			inputMineNum;
+			if ((0 < inputWidth <= 50) && (0 < inputHeight <= 50) && (0 < inputMineNum <= 1000)) {
+				loop = false;
+			}
+			else {
+				fprintf(stderr, "\nERROR: Incorrect range of input, or input calculation error\nReturning to selection...\n");
+			}
+		}
+		MBoard gameBoard = initalizeBoard(inputWidth, inputHeight, inputMineNum);
+	}
+}
+void RunMineSweeper(USER* inputUser) {//this will be called in main and pass the user into it to save scores
+	printf("Welcome to Minesweeper %s!\n",inputUser->username);
+	printf("Current Highscore = %d\n\n", inputUser->minesweeper_highscore);
+
 	printf("would you like to: \n");
 	printf("A = start a new game\n");
 	printf("B = view Rules / Help\n");
 	printf("C = Exit\n");
 	char Choice;
-	scanf("%c", &Choice);
+	scanf_s("%c", &Choice,1);
+	char newline = getc(stdin);//trailing newline?
+	switch (Choice) {
+	case 'A':
+		startGame(inputUser);
+	}
 }
 
 MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board for new game
