@@ -15,9 +15,18 @@
 
 #define MINE -2
 #define UNINIT -1
-//void RunMineSweeper(USER* inputUser) {//this will be called in main and pass the user into it to save scores
-//
-//}
+void RunMineSweeper() {//this will be called in main and pass the user into it to save scores
+	char* name="testName";
+	int score=0;
+	printf("Welcome %s to Minesweeper\n",name);
+	
+	printf("would you like to: \n");
+	printf("A = start a new game\n");
+	printf("B = view Rules / Help\n");
+	printf("C = Exit\n");
+	char Choice;
+	scanf("%c", &Choice);
+}
 
 MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board for new game
 	srand(time(NULL));

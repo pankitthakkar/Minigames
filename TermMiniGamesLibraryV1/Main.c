@@ -12,10 +12,5 @@
 	//
 #include "Minesweeper.h"
 int main(void) {
-	MBoard testBoard = initalizeBoard(9, 9, 10);
-	printCurrentBoard(testBoard);
-	printFinalBoard(testBoard);
-
-	printf("testdone\n");
 	return 0;
 }
