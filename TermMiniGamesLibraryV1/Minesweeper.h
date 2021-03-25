@@ -1,6 +1,6 @@
 #pragma once
 //Minesweeper header for tests / integration
-#define MAXBOARD 52//fixes compilation issue
+#include "Main.h"
 typedef struct MinesweeperBoard {
 	int height;
 	int width;
@@ -8,8 +8,8 @@ typedef struct MinesweeperBoard {
 	int numOfMines;
 	int currentMines;
 
-	int currentBoard[MAXBOARD][MAXBOARD];
-	int filledBoard[MAXBOARD][MAXBOARD];
+	int* currentBoard;
+	int* filledBoard;
 
 }MBoard;
 void startGame(USER* inputUser);//actual game called by runMineSweeper
@@ -31,3 +31,5 @@ void printFinalBoard(MBoard printBoard);
 //int playerLose(MBoard* deleteBoard);//returns choice of 0 error, 1 continue, 2 exit
 //
 //int restartScreen();//restart screen seen after win or loss
+
+void deleteMBoard(MBoard* inputBoard);
