@@ -1,0 +1,7 @@
+Written by: Anthony Sasso, Minesweeper Module developer.
+Notes about screen captures for future referance (photos taken 2021-03-25 7:31pm)
+
+1. EASY, MEDIUM, and HARD looked fine (given large enough screen size
+
+2. CUSTOM option is limited to 50x50 and 1000 mines, but due to my laptop size is wrapped an looked off (but may still be viewable since it auto aligned in a staggared manner... not sure this is fixable, but may remove custom option depending on how the program works out.
+

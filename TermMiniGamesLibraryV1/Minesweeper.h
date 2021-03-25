@@ -2,14 +2,14 @@
 //Minesweeper header for tests / integration
 #include "Main.h"
 typedef struct MinesweeperBoard {
-	int height;
-	int width;
+	int rows;
+	int columns;
 
 	int numOfMines;
 	int currentMines;
 
-	int* currentBoard;
-	int* filledBoard;
+	int** currentBoard;
+	int** filledBoard;
 
 }MBoard;
 void startGame(USER* inputUser);//actual game called by runMineSweeper

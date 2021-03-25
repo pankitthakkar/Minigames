@@ -7,13 +7,13 @@
 #include "Main.h"
 #include "Minesweeper.h"
 
-#define EASYSIZE 11	//got difficulties form wikipedia...
+#define EASYSIZE 9	//got difficulties form wikipedia...
 #define EASYMINE 10
 
-#define MEDSIZE 18
+#define MEDSIZE 16
 #define MEDMINE 40
 
-#define HARDSIZE 32
+#define HARDSIZE 30
 #define HARDMINE 99
 
 #define MAXINPUT 30
@@ -80,6 +80,8 @@ void startGame(USER* inputUser) {
 		
 	}
 	MBoard gameBoard = initalizeBoard(inputWidth, inputHeight, inputMineNum);
+	printCurrentBoard(gameBoard);
+	printFinalBoard(gameBoard);
 	deleteMBoard(&gameBoard);
 }
 void RunMineSweeper(USER* inputUser) {//this will be called in main and pass the user into it to save scores
@@ -106,20 +108,54 @@ MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board
 	int length = 0;
 	newBoard.numOfMines = numOfMines;//set values for mines, and numbers later
 	newBoard.currentMines = 0;
-	newBoard.width = xWidth;
-	newBoard.height = yHeight;
+	newBoard.columns = xWidth;
+	newBoard.rows = yHeight;
 	//row = y
 	//col = x
 	//to find things in array = [(y * numCols) * x]
-	int numRows = newBoard.height+2;
-	int numCols = newBoard.width+2;
-	newBoard.currentBoard = (int*)malloc(numRows * numCols * sizeof(int));
-	newBoard.filledBoard = (int*)malloc(numRows * numCols * sizeof(int));
+	int numRows = newBoard.rows+2;//+2 is for buffer around field
+	int numCols = newBoard.columns+2;
+	newBoard.currentBoard = (int**)malloc(numRows * sizeof(int*));
+	//Check malloc
+	if (newBoard.currentBoard == NULL)
+	{
+		fprintf(stderr,"\nERROR: User Board allocation\n");
+	}
+	//Allocate columns
+	for (int i = 0; i < numRows; i++)
+	{
+		newBoard.currentBoard[i] = (int*)malloc(numCols * sizeof(int));
+		//Check for malloc
+		if (newBoard.currentBoard[i] == NULL)
+		{
+			deleteMBoard(&newBoard);
+			exit(1);
+		}
+	}
+
+	newBoard.filledBoard = (int**)malloc(numRows * sizeof(int*));
+	//Check malloc
+	if (newBoard.filledBoard == NULL)
+	{
+		fprintf(stderr, "\nERROR: User Board allocation\n");
+	}
+	//Allocate columns
+	for (int i = 0; i < numRows; i++)
+	{
+		newBoard.filledBoard[i] = (int*)malloc(numCols * sizeof(int));
+		//Check for malloc
+		if (newBoard.filledBoard[i] == NULL)
+		{
+			deleteMBoard(&newBoard);
+			exit(1);
+		}
+	}
+
 	//error at (24,2), (19,3), (17,4)
-	for (int y = 0; y < newBoard.height+2; y++) {
-		for (int x = 0; x < newBoard.width+2; x++) {
-			newBoard.filledBoard[(y * numCols) * x] = UNINIT;//-1 == uninitalized for count later
-			newBoard.currentBoard[(y * numCols) * x] = UNINIT;
+	for (int row = 0; row < newBoard.rows+2; row++) {
+		for (int column = 0; column < newBoard.columns+2; column++) {
+			newBoard.filledBoard[row][column] = UNINIT;//-1 == uninitalized for count later
+			newBoard.currentBoard[row][column] = UNINIT;
 		}
 	}
 	/*
@@ -129,10 +165,10 @@ MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board
 	int row=0;
 	int column=0;
 	while (newBoard.currentMines < newBoard.numOfMines) {// -1 == mine on spot
-		row = rand() % (newBoard.height+1)+1;
-		column = rand() % (newBoard.width+1)+1;
-		if (MINE != (newBoard.filledBoard[(row * numCols) * column])) {//if mine is already there skip and try again
-			newBoard.filledBoard[(row * numCols) * column] = MINE;
+		row = rand() % (newBoard.rows+1)+1;
+		column = rand() % (newBoard.columns+1)+1;
+		if (MINE != (newBoard.filledBoard[row][column])) {//if mine is already there skip and try again
+			newBoard.filledBoard[row][column] = MINE;
 			newBoard.currentMines++;
 		}
 	}
@@ -147,34 +183,34 @@ MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board
 		y+1		[x-1][y+1]	[x][y+1]	[x+1][y+1]
 
 	*/
-	for (int y = 1; y < newBoard.width + 1; y++) {
-		for (int x = 1; x < newBoard.height + 1; x++) {
-			if (MINE != newBoard.filledBoard[(y * numCols) * x]) {
-				newBoard.filledBoard[(y * numCols) * x] = 0;//redundant but good in case
+	for (int row = 1; row < newBoard.rows + 1; row++) {
+		for (int column = 1; column < newBoard.columns + 1; column++) {
+			if (MINE != newBoard.filledBoard[row][column]) {
+				newBoard.filledBoard[row][column] = 0;//redundant but good in case
 			}
-			if ((MINE == newBoard.filledBoard[((y - 1) * numCols) * x]) && MINE != newBoard.filledBoard[(y * numCols) * x]) {//up
-				newBoard.filledBoard[(y * numCols) * x]++;
+			if ((MINE == newBoard.filledBoard[row - 1][column]) && MINE != newBoard.filledBoard[row][column]) {//up
+				newBoard.filledBoard[row][column]++;
 			}
-			if ((MINE == newBoard.filledBoard[((y - 1)* numCols) * (x - 1)]) && MINE != newBoard.filledBoard[(y * numCols) * x]) {//up and left		//access violation reading location due to left or up of first pos == nothing...
-				newBoard.filledBoard[(y * numCols) * x]++;
+			if ((MINE == newBoard.filledBoard[row - 1][column - 1]) && MINE != newBoard.filledBoard[row][column]) {//up and left		//access violation reading location due to left or up of first pos == nothing...
+				newBoard.filledBoard[row][column]++;
 			}
-			if ((MINE == newBoard.filledBoard[(y * numCols) * (x - 1)]) && MINE != newBoard.filledBoard[(y * numCols) * x]) {//left
-				newBoard.filledBoard[(y * numCols) * x]++;
+			if ((MINE == newBoard.filledBoard[row][column - 1]) && MINE != newBoard.filledBoard[row][column]) {//left
+				newBoard.filledBoard[row][column]++;
 			}
-			if ((MINE == newBoard.filledBoard[((y + 1) * numCols) * (x - 1)]) && MINE != newBoard.filledBoard[(y * numCols) * x]) {//down and left
-				newBoard.filledBoard[(y * numCols) * x]++;
+			if ((MINE == newBoard.filledBoard[row + 1][column-1]) && MINE != newBoard.filledBoard[row][column]) {//down and left
+				newBoard.filledBoard[row][column]++;
 			}
-			if ((MINE == newBoard.filledBoard[((y + 1) * numCols) * x]) && MINE != newBoard.filledBoard[(y * numCols) * x]) {//down
-				newBoard.filledBoard[(y * numCols) * x]++;
+			if ((MINE == newBoard.filledBoard[row + 1][column]) && MINE != newBoard.filledBoard[row][column]) {//down
+				newBoard.filledBoard[row][column]++;
 			}
-			if ((MINE == newBoard.filledBoard[((y + 1) * numCols) * (x + 1)]) && MINE != newBoard.filledBoard[(y * numCols) * x]) {//down and right
-				newBoard.filledBoard[(y * numCols) * x]++;
+			if ((MINE == newBoard.filledBoard[row + 1][column + 1]) && MINE != newBoard.filledBoard[row][column]) {//down and right
+				newBoard.filledBoard[row][column]++;
 			}
-			if ((MINE == newBoard.filledBoard[(y * numCols) * (x + 1)]) && MINE != newBoard.filledBoard[(y * numCols) * x]) {//right
-				newBoard.filledBoard[(y * numCols) * x]++;
+			if ((MINE == newBoard.filledBoard[row][column + 1]) && MINE != newBoard.filledBoard[row][column]) {//right
+				newBoard.filledBoard[row][column]++;
 			}
-			if ((MINE == newBoard.filledBoard[((y - 1) * numCols) * (x + 1)]) && MINE != newBoard.filledBoard[(y * numCols) * x]) {//up and right
-				newBoard.filledBoard[(y * numCols) * x]++;
+			if ((MINE == newBoard.filledBoard[row - 1][column + 1]) && MINE != newBoard.filledBoard[row][column]) {//up and right
+				newBoard.filledBoard[row][column]++;
 			}
 		}
 	}
@@ -195,7 +231,7 @@ MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board
 		[8] == 8 mines around it
 */
 void printCurrentBoard(MBoard printBoard) {
-	for (int i = 0; i < printBoard.width + 1; i++) {
+	for (int i = 0; i < printBoard.columns + 1; i++) {
 		if (0 == i) {
 			printf("[-]\t");
 		}
@@ -204,18 +240,17 @@ void printCurrentBoard(MBoard printBoard) {
 		}
 	}
 	printf("\n\n");
-	int numCols = printBoard.width;
-	for (int y = 1; y < printBoard.height+1; y++) {
-		printf("[%d]\t", y);
-		for (int x = 1; x < printBoard.width+1; x++) {
-			if (UNINIT == printBoard.currentBoard[(y * numCols) * x]) {
+	for (int row = 1; row < printBoard.rows+1; row++) {
+		printf("[%d]\t", row);
+		for (int col = 1; col < printBoard.columns+1; col++) {
+			if (UNINIT == printBoard.currentBoard[row][col]) {
 				printf("[?]\t");
 			}
 			//else if (0 == printBoard.currentBoard[x][y]) {
 			//	printf("[0]\t");//just in case 0 is weird
 			//}
 			else{
-				printf("[%d]\t", printBoard.currentBoard[(y * numCols) * x]);
+				printf("[%d]\t", printBoard.currentBoard[row][col]);
 			}
 
 		}
@@ -224,7 +259,7 @@ void printCurrentBoard(MBoard printBoard) {
 	printf("\n\n");
 }
 void printFinalBoard(MBoard printBoard) {
-	for (int i = 0; i < printBoard.width+1; i++) {
+	for (int i = 0; i < printBoard.columns + 1; i++) {
 		if (0 == i) {
 			printf("[-]\t");
 		}
@@ -233,23 +268,21 @@ void printFinalBoard(MBoard printBoard) {
 		}
 	}
 	printf("\n\n");
-	int numCols = printBoard.width;
-	for (int y = 1; y < printBoard.height+1; y++) {
-		printf("[%d]\t", y);
-		for (int x = 1; x < printBoard.width+1; x++) {
-			if (MINE == printBoard.filledBoard[(y * numCols) * x]) {
+	for (int row = 1; row < printBoard.rows + 1; row++) {
+		printf("[%d]\t", row);
+		for (int col = 1; col < printBoard.columns + 1; col++) {
+			if (MINE == printBoard.filledBoard[row][col]) {
 				printf("[M]\t");
 			}
-			else if (UNINIT == printBoard.filledBoard[(y * numCols) * x]) {
+			else if (UNINIT == printBoard.filledBoard[row][col]) {
 				printf("[?]\t");
 			}
 			//else if (0 == printBoard.currentBoard[x][y]) {
 			//	printf("[0]\t");//just in case 0 is weird
 			//}
 			else {
-				printf("[%d]\t", printBoard.filledBoard[(y * numCols) * x]);
+				printf("[%d]\t", printBoard.filledBoard[row][col]);
 			}
-
 		}
 		printf("\n\n");
 	}
@@ -275,11 +308,14 @@ void printFinalBoard(MBoard printBoard) {
 //
 //}
 void deleteMBoard(MBoard* inputBoard) {
-	int numCols = inputBoard->width + 2;
-	for (int y = 0; y < inputBoard->height+2; y++) {
-		for (int x = 0; x < inputBoard->width+2; x++) {
-			inputBoard->filledBoard[(y * numCols) * x] = (int)NULL;
-			inputBoard->currentBoard[(y * numCols) * x] = (int)NULL;
+	int numCols = inputBoard->columns + 2;
+	for (int row = 0; row < inputBoard->rows + 2; row++) {
+		for (int col = 0; col < inputBoard->columns + 2; col++) {
+			inputBoard->filledBoard[row][col] = (int)NULL;//to avoid leaking memory before releasing
+			inputBoard->currentBoard[row][col] = (int)NULL;
+			free(inputBoard->filledBoard[row][col]);
+			free(inputBoard->currentBoard[row][col]);
+
 		}
 	}
 	free(inputBoard->currentBoard);
