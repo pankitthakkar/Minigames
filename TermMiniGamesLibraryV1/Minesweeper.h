@@ -1,6 +1,21 @@
 #pragma once
 //Minesweeper header for tests / integration
 #include "Main.h"
+#include <stdbool.h>
+
+#define EASYSIZE 9	//got difficulties form wikipedia...
+#define EASYMINE 10
+
+#define MEDSIZE 16
+#define MEDMINE 40
+
+#define HARDSIZE 30
+#define HARDMINE 99
+
+#define MAXINPUT 30
+#define MINE -2
+#define UNINIT -1
+
 typedef struct MinesweeperBoard {
 	int rows;
 	int columns;
@@ -12,6 +27,7 @@ typedef struct MinesweeperBoard {
 	int** filledBoard;
 
 }MBoard;
+
 void startGame(USER* inputUser);//actual game called by runMineSweeper
 
 void RunMineSweeper(USER* inputUser);//this will be called in main and pass the user into it to save scores
@@ -22,10 +38,12 @@ void printCurrentBoard(MBoard printBoard); //top simplify job later on
 
 void printFinalBoard(MBoard printBoard);
 
-//bool updateBoard(MBoard* gameBoard);//gets user choice, first goes to checkInput then updates and returns board
-//
-//bool checkInput(MBoard gameBoard);//checks input compared to current board and returns new board
-//
+bool updateBoard(MBoard* currentBoard);//gets user choice, first goes to checkInput then updates and returns board
+
+int updateBoardStub(MBoard* testBoard, int testRow, int testColumn);
+
+int checkInput(MBoard gameBoard,int inputRow, int inputColumn);//checks input compared to current board and returns new board
+
 //int playerWin(USER* inputUser,MBoard* deleteBoard);//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
 //
 //int playerLose(MBoard* deleteBoard);//returns choice of 0 error, 1 continue, 2 exit

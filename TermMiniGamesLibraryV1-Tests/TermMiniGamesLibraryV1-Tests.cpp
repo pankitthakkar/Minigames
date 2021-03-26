@@ -48,17 +48,38 @@ namespace TermMiniGamesLibraryV1Tests
 	{
 	public:
 
-		TEST_METHOD(T02_01_Board_Initalization)//this test always return true.. will have to breakpoint through it to see :)
+		TEST_METHOD(T02_00_UpdateBoard_Succeed)
 		{
-			
+			MBoard testBoard = initalizeBoard(25, 25, 10);
+			testBoard.filledBoard[13][13] = 3;//sets to a "good" value so check works
+			int check = updateBoardStub(&testBoard, 13, 13);
+			deleteMBoard(&testBoard);
+			Assert::AreEqual(check, 0);
 		}
 
-		TEST_METHOD(T02_02_)
+		TEST_METHOD(T02_01_UpdateBoard_Mine)
 		{
+			MBoard testBoard = initalizeBoard(25, 25, 10);
+			testBoard.filledBoard[20][19] = MINE;
+			int check = updateBoardStub(&testBoard, 20, 19);
+			deleteMBoard(&testBoard);
+			Assert::AreEqual(check, 1);
 		}
 
-		TEST_METHOD(T02_03_)
+		TEST_METHOD(T02_02_UpdateBoard_SameSpot)
 		{
+			MBoard testBoard = initalizeBoard(25, 25, 10);
+			testBoard.currentBoard[10][10] = 3;
+			int check = updateBoardStub(&testBoard, 10, 10);
+			deleteMBoard(&testBoard);
+			Assert::AreEqual(check, 2);
+		}
+
+		TEST_METHOD(T02_03_UpdateBoard_Off_Board)
+		{
+			MBoard testBoard = initalizeBoard(25, 25, 10);
+			int check = updateBoardStub(&testBoard, 30, 30);
+			Assert::AreEqual(check, 3);
 		}
 	};
 

@@ -7,18 +7,6 @@
 #include "Main.h"
 #include "Minesweeper.h"
 
-#define EASYSIZE 9	//got difficulties form wikipedia...
-#define EASYMINE 10
-
-#define MEDSIZE 16
-#define MEDMINE 40
-
-#define HARDSIZE 30
-#define HARDMINE 99
-
-#define MAXINPUT 30
-#define MINE -2
-#define UNINIT -1
 void startGame(USER* inputUser) {
 	printf("Enter one of the following options (case sensitive)\n");
 	printf("EASY - Width 09, Height 09, 10 mines\n");
@@ -288,14 +276,83 @@ void printFinalBoard(MBoard printBoard) {
 	}
 	printf("\n\n");
 }
-//bool updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkInput then updates and returns board
-//
-//}
-//
-//bool checkInput(MBoard currentBoard) {//checks input compared to current board and returns new board
-//
-//}
-//
+bool updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkInput then updates and returns board
+	int inputRow;
+	int inputColumn;
+	printf("\nPlease enter a coordinate (ROW, COLUMN)\n");
+	printf("ROW #:");
+	scanf_s("%d", &inputRow);
+	int newline = getc(stdin);//trailing newline?
+
+	printf("COLUMN #:");
+	scanf_s("%d", &inputColumn);
+	newline = getc(stdin);//trailing newline?
+	int checkValue = checkInput(*currentBoard, inputRow, inputColumn);
+	if (inputRow > currentBoard->rows || inputColumn > currentBoard->columns) {
+		printf("oops, that coordinate is off the board!\n");
+		
+	}
+	if (0 == checkValue) {
+		currentBoard->currentBoard[inputRow][inputColumn] = currentBoard->filledBoard[inputRow][inputColumn];//updates user's board with correct value
+	}
+	else if (1 == checkValue) {
+		printf("oops, you stepped on a mine!\n");
+		return false;
+	}
+	else if (2 == checkValue) {
+		printf("oops, you already chose that spot\n");
+	}
+	else {
+		fprintf(stderr, "\nERROR: failed to update Board\n");
+		exit(2);
+	}
+	return true;//return if correct or they choose the same spot twice (which wouldn't be a fail)
+}
+int updateBoardStub(MBoard* testBoard, int testRow, int testColumn) {//stub for update board
+	//int inputRow;
+	//int inputColumn;
+	//printf("\nPlease enter a coordinate (ROW, COLUMN)\n");
+	//printf("ROW #:");
+	//scanf_s("%d", &inputRow);
+	//int newline = getc(stdin);//trailing newline?
+
+	//printf("COLUMN #:");
+	//scanf_s("%d", &inputColumn);
+	//newline = getc(stdin);//trailing newline?
+	int checkValue = checkInput(*testBoard, testRow, testColumn);
+	if (testRow > testBoard->rows || testColumn > testBoard->columns) {
+		printf("oops, that coordinate is off the board!\n");
+		return 3;
+	}
+	if (0 == checkValue) {
+		testBoard->currentBoard[testRow][testColumn] = testBoard->filledBoard[testRow][testColumn];//updates user's board with correct value
+		return 0;
+	}
+	else if (1 == checkValue) {
+		printf("oops, you stepped on a mine!\n");
+		return 1;
+	}
+	else if (2 == checkValue) {
+		printf("oops, you already chose that spot\n");
+		return 2;
+	}
+	else {
+		return 4;
+	}
+}
+
+int checkInput(MBoard currentBoard, int inputRow, int inputColumn) {//checks input compared to current board and returns new board
+	if (MINE == currentBoard.filledBoard[inputRow][inputColumn]) {//picked a mine
+		return 1;
+	}
+	else if (UNINIT != currentBoard.currentBoard[inputRow][inputColumn]) {//sopt already chosen
+		return 2;
+	}
+	else {
+		return 0;//good input
+	}
+}
+
 //int playerWin(USER* inputUser,MBoard* deleteBoard) {//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
 //
 //}
@@ -313,8 +370,8 @@ void deleteMBoard(MBoard* inputBoard) {
 		for (int col = 0; col < inputBoard->columns + 2; col++) {
 			inputBoard->filledBoard[row][col] = (int)NULL;//to avoid leaking memory before releasing
 			inputBoard->currentBoard[row][col] = (int)NULL;
-			free(inputBoard->filledBoard[row][col]);
-			free(inputBoard->currentBoard[row][col]);
+			free((inputBoard->filledBoard[row][col]));
+			free((inputBoard->currentBoard[row][col]));
 
 		}
 	}
