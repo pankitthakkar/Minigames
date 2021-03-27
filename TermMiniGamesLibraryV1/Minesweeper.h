@@ -38,16 +38,16 @@ void printCurrentBoard(MBoard printBoard); //top simplify job later on
 
 void printFinalBoard(MBoard printBoard);
 
-bool updateBoard(MBoard* currentBoard);//gets user choice, first goes to checkInput then updates and returns board
+int updateBoard(MBoard* currentBoard);//gets user choice, first goes to checkInput then updates and returns board
 
 int updateBoardStub(MBoard* testBoard, int testRow, int testColumn);
 
 int checkInput(MBoard gameBoard,int inputRow, int inputColumn);//checks input compared to current board and returns new board
 
-//int playerWin(USER* inputUser,MBoard* deleteBoard);//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
-//
-//int playerLose(MBoard* deleteBoard);//returns choice of 0 error, 1 continue, 2 exit
-//
-//int restartScreen();//restart screen seen after win or loss
+void playerWin(USER* inputUser,int newScore);//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
+
+void playerLose(MBoard* deleteBoard);//returns choice of 0 error, 1 continue, 2 exit
+
+bool checkWin(MBoard inputBoard);
 
 void deleteMBoard(MBoard* inputBoard);

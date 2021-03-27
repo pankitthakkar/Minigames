@@ -68,24 +68,49 @@ void startGame(USER* inputUser) {
 		
 	}
 	MBoard gameBoard = initalizeBoard(inputWidth, inputHeight, inputMineNum);
-	printCurrentBoard(gameBoard);
-	printFinalBoard(gameBoard);
+	loop = true;//reuse loop for simplicity
+	int continueGame = 0;
+	while (0 == continueGame) {
+		printCurrentBoard(gameBoard);
+		continueGame = updateBoard(&gameBoard);
+	}
+	if (1 == continueGame) {
+		playerLose(&gameBoard);
+	}
+	else if (2 == continueGame) {
+		int score = (gameBoard.numOfMines * (gameBoard.rows * gameBoard.columns / 10)); //simple method for calculating score not sure its correct but best I could think of...
+		playerWin(inputUser,score);
+	}
 	deleteMBoard(&gameBoard);
 }
 void RunMineSweeper(USER* inputUser) {//this will be called in main and pass the user into it to save scores
-	printf("Welcome to Minesweeper %s!\n",inputUser->username);
-	printf("Current Highscore = %d\n\n", inputUser->minesweeper_highscore);
-
-	printf("would you like to: \n");
-	printf("A = start a new game\n");
-	printf("B = view Rules / Help\n");
-	printf("C = Exit\n");
-	char Choice;
-	scanf_s("%c", &Choice,1);
-	char newline = getc(stdin);//trailing newline?
-	switch (Choice) {
-	case 'A':
-		startGame(inputUser);
+	bool loop = true;
+	while (true == loop) {
+		printf("Welcome to Minesweeper %s!\n", inputUser->username);
+		printf("Current Highscore = %d\n\n", inputUser->minesweeper_highscore);
+		printf("would you like to: \n");
+		printf("1 = start a new game\n");
+		printf("2 = view Rules / Help\n");
+		printf("3 = Exit\n");
+		int Choice;
+		scanf_s("%d", &Choice);
+		char newline = getc(stdin);//trailing newline?
+		if (1 == Choice) {
+			startGame(inputUser);
+		}
+		else if (2 == Choice) {
+			printf("The rules are:\n\n");
+			printf("1. The number on a spot tells you the amount of mines surrounding it from 1-8\n");
+			printf("2. The game ends if you select a spot with a mine\n");
+			printf("3. The goal is to uncover all the spaces OTHER than the ones with mines, and finish the game\n");
+			printf("\nNote* This game does not have a time limit so take your time and think it over");
+		}
+		else if (3 == Choice) {
+			loop = false;//exit if not restarts menu
+		}
+		else{
+			printf("unknown input returning to menu\n\n");
+		}
 	}
 }
 
@@ -276,7 +301,7 @@ void printFinalBoard(MBoard printBoard) {
 	}
 	printf("\n\n");
 }
-bool updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkInput then updates and returns board
+int updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkInput then updates and returns board
 	int inputRow;
 	int inputColumn;
 	printf("\nPlease enter a coordinate (ROW, COLUMN)\n");
@@ -290,17 +315,32 @@ bool updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkI
 	int checkValue = checkInput(*currentBoard, inputRow, inputColumn);
 	if (inputRow > currentBoard->rows || inputColumn > currentBoard->columns) {
 		printf("oops, that coordinate is off the board!\n");
-		
+		return 0;
 	}
 	if (0 == checkValue) {
 		currentBoard->currentBoard[inputRow][inputColumn] = currentBoard->filledBoard[inputRow][inputColumn];//updates user's board with correct value
+		bool win = checkWin(*currentBoard);
+		if (true == win) {
+			return 3;
+		}
+		else {
+			return 0;
+		}
+
 	}
 	else if (1 == checkValue) {
 		printf("oops, you stepped on a mine!\n");
-		return false;
+		return 1;
 	}
 	else if (2 == checkValue) {
 		printf("oops, you already chose that spot\n");
+		bool win = checkWin(*currentBoard);
+		if (true == win) {
+			return 2;
+		}
+		else {
+			return 0;
+		}
 	}
 	else {
 		fprintf(stderr, "\nERROR: failed to update Board\n");
@@ -353,17 +393,34 @@ int checkInput(MBoard currentBoard, int inputRow, int inputColumn) {//checks inp
 	}
 }
 
-//int playerWin(USER* inputUser,MBoard* deleteBoard) {//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
-//
-//}
-//
-//int playerLose(MBoard* deleteBoard) {//returns choice of 0 error, 1 continue, 2 exit
-//
-//}
-//
-//int restartScreen() {//restart screen seen after win or loss
-//
-//}
+void playerWin(USER* inputUser,int newScore) {//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
+	printf("Congratulations, you win!\n");
+	if (inputUser->minesweeper_highscore < newScore) {
+		inputUser->minesweeper_highscore = newScore;
+		printf("You beat your high score, your new high score is %d\n", newScore);
+	}
+}
+
+void playerLose(MBoard* deleteBoard) {//returns choice of 0 error, 1 continue, 2 exit
+	printf("Oh no you lost!\n");
+	printf("The board you had was:\n\n");
+	printCurrentBoard(*deleteBoard);
+	printf("The full board was:\n\n");
+	printFinalBoard(*deleteBoard);
+}
+
+bool checkWin(MBoard inputBoard) {//checks if they win
+	
+	for (int row = 0; row < inputBoard.rows; row++) {
+		for (int col = 0; col < inputBoard.columns; col++) {
+			if ((inputBoard.currentBoard[row][col] != inputBoard.filledBoard[row][col]) && (MINE != inputBoard.filledBoard[row][col])) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 void deleteMBoard(MBoard* inputBoard) {
 	int numCols = inputBoard->columns + 2;
 	for (int row = 0; row < inputBoard->rows + 2; row++) {
