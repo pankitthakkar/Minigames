@@ -165,8 +165,8 @@ MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board
 	}
 
 	//error at (24,2), (19,3), (17,4)
-	for (int row = 0; row < newBoard.rows+2; row++) {
-		for (int column = 0; column < newBoard.columns+2; column++) {
+	for (int row = 1; row < newBoard.rows+1; row++) {
+		for (int column = 1; column < newBoard.columns+1; column++) {
 			newBoard.filledBoard[row][column] = UNINIT;//-1 == uninitalized for count later
 			newBoard.currentBoard[row][column] = UNINIT;
 		}
@@ -178,10 +178,10 @@ MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board
 	int row=0;
 	int column=0;
 	while (newBoard.currentMines < newBoard.numOfMines) {// -1 == mine on spot
-		row = rand() % (newBoard.rows+1)+1;
-		column = rand() % (newBoard.columns+1)+1;
-		if (MINE != (newBoard.filledBoard[row][column])) {//if mine is already there skip and try again
-			newBoard.filledBoard[row][column] = MINE;
+		row = rand() % (newBoard.rows)+1;
+		column = rand() % (newBoard.columns)+1;
+		if (MINE != (newBoard.filledBoard[row+1][column+1]) && row !=0 && column != 0 ) {//if mine is already there skip and try again
+			newBoard.filledBoard[row+1][column+1] = MINE;
 			newBoard.currentMines++;
 		}
 	}
@@ -307,19 +307,18 @@ int updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkIn
 	printf("\nPlease enter a coordinate (ROW, COLUMN)\n");
 	printf("ROW #:");
 	scanf_s("%d", &inputRow);
-	int newline = getc(stdin);//trailing newline?
-
+	//int newline = getc(stdin);//trailing newline?
 	printf("COLUMN #:");
 	scanf_s("%d", &inputColumn);
-	newline = getc(stdin);//trailing newline?
-	int checkValue = checkInput(*currentBoard, inputRow, inputColumn);
-	if (inputRow > currentBoard->rows || inputColumn > currentBoard->columns) {
+	//newline = getc(stdin);//trailing newline?
+	int checkValue = checkInput(*(currentBoard), inputRow, inputColumn);
+	if (0 > inputRow ||inputRow > currentBoard->rows || 0 > inputColumn || inputColumn > currentBoard->columns) {
 		printf("oops, that coordinate is off the board!\n");
 		return 0;
 	}
 	if (0 == checkValue) {
 		currentBoard->currentBoard[inputRow][inputColumn] = currentBoard->filledBoard[inputRow][inputColumn];//updates user's board with correct value
-		bool win = checkWin(*currentBoard);
+		bool win = checkWin(*(currentBoard));
 		if (true == win) {
 			return 3;
 		}
@@ -334,7 +333,7 @@ int updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkIn
 	}
 	else if (2 == checkValue) {
 		printf("oops, you already chose that spot\n");
-		bool win = checkWin(*currentBoard);
+		bool win = checkWin(*(currentBoard));
 		if (true == win) {
 			return 2;
 		}

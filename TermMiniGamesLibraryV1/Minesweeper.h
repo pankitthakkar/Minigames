@@ -3,7 +3,7 @@
 #include "Main.h"
 #include <stdbool.h>
 
-#define EASYSIZE 9	//got difficulties form wikipedia...
+#define EASYSIZE 9	//got difficulties from wikipedia...
 #define EASYMINE 10
 
 #define MEDSIZE 16
