@@ -43,11 +43,11 @@ void startGame(USER* inputUser) {
 		else if (0 == strcmp("CUSTOM", optionChoice)) {//ask for custom and continue if within bounds
 			printf("enter options as: Width Height Mines\n:");
 
-			printf("input width (max of 50):");
+			printf("input width (max of 30):");
 			scanf_s("%d", &inputWidth);
 			char newline = getc(stdin);//trailing newline?
 
-			printf("input height (max of 50):");
+			printf("input height (max of 60):");
 			scanf_s("%d", &inputHeight);
 			newline = getc(stdin);//trailing newline?
 
@@ -55,7 +55,7 @@ void startGame(USER* inputUser) {
 			scanf_s("%d", &inputMineNum);
 			newline = getc(stdin);//trailing newline?
 
-			if ((0 < inputWidth <= 50) && (0 < inputHeight <= 50) && (0 < inputMineNum <= 1000) && (inputMineNum < (inputWidth * inputHeight))) {
+			if ((0 < inputWidth <= 30) && (0 < inputHeight <= 60) && (0 < inputMineNum <= 1000) && (inputMineNum < (inputWidth * inputHeight))) {
 				loop = false;
 			}
 			else {
@@ -78,8 +78,12 @@ void startGame(USER* inputUser) {
 		playerLose(&gameBoard);
 	}
 	else if (2 == continueGame) {
-		int score = (gameBoard.numOfMines * (gameBoard.rows * gameBoard.columns / 10)); //simple method for calculating score not sure its correct but best I could think of...
+		int score = (gameBoard.numOfMines * (gameBoard.rows * gameBoard.columns)); //simple method for calculating score not sure its correct but best I could think of...
 		playerWin(inputUser,score);
+	}
+	else if (3 == continueGame) {
+		printf("Exiting game,\nFinal Board:\n");
+		printFinalBoard(gameBoard);
 	}
 	deleteMBoard(&gameBoard);
 }
@@ -175,13 +179,13 @@ MBoard initalizeBoard(int xWidth,int yHeight, int numOfMines) {//initliaze board
 	Exception thrown: write access violation.
 	newBoard.**filledBoard** was 0x223E18A.
 	*/
-	int row=0;
-	int column=0;
+	int mineRow=0;
+	int mineColumn=0;
 	while (newBoard.currentMines < newBoard.numOfMines) {// -1 == mine on spot
-		row = rand() % (newBoard.rows)+1;
-		column = rand() % (newBoard.columns)+1;
-		if (MINE != (newBoard.filledBoard[row+1][column+1]) && row !=0 && column != 0 ) {//if mine is already there skip and try again
-			newBoard.filledBoard[row+1][column+1] = MINE;
+		mineRow = (rand() % newBoard.rows)+1;
+		mineColumn = (rand() % newBoard.columns)+1;
+		if (MINE != (newBoard.filledBoard[mineRow][mineColumn]) && mineRow !=0 && mineColumn != 0 ) {//if mine is already there skip and try again
+			newBoard.filledBoard[mineRow][mineColumn] = MINE;
 			newBoard.currentMines++;
 		}
 	}
@@ -304,13 +308,16 @@ void printFinalBoard(MBoard printBoard) {
 int updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkInput then updates and returns board
 	int inputRow;
 	int inputColumn;
-	printf("\nPlease enter a coordinate (ROW, COLUMN)\n");
+	printf("\nPlease enter a coordinate (ROW, COLUMN)\n (enter -1 in either to exit the game)\n");
 	printf("ROW #:");
 	scanf_s("%d", &inputRow);
 	//int newline = getc(stdin);//trailing newline?
 	printf("COLUMN #:");
 	scanf_s("%d", &inputColumn);
 	//newline = getc(stdin);//trailing newline?
+	if (-1 == inputRow || -1 == inputColumn) {
+		return 3;
+	}
 	int checkValue = checkInput(*(currentBoard), inputRow, inputColumn);
 	if (0 > inputRow ||inputRow > currentBoard->rows || 0 > inputColumn || inputColumn > currentBoard->columns) {
 		printf("oops, that coordinate is off the board!\n");
@@ -320,7 +327,7 @@ int updateBoard(MBoard* currentBoard) {//gets user choice, first goes to checkIn
 		currentBoard->currentBoard[inputRow][inputColumn] = currentBoard->filledBoard[inputRow][inputColumn];//updates user's board with correct value
 		bool win = checkWin(*(currentBoard));
 		if (true == win) {
-			return 3;
+			return 2;
 		}
 		else {
 			return 0;
