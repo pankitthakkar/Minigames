@@ -13,116 +13,43 @@
 
 
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#pragma warning(disable : 4996)
-struct login                           // before the first use of `l`.
+#include "Main.h"
+#include "HangMan.h"
+#include "RPS.h"
+#include "Minesweeper.h"
+
+int main()
 {
-    char fname[30];
-    char lname[30];
-    char username[30];
-    char password[20];
-};
+	int b;
+	printf("Welcome");
 
-void login(void);
-void registration(void);
+	USER user;
+	user.hangman_highscore = 0;
+	user.minesweeper_highscore = 0;
+	user.RPS_highscore = 0;
 
-int main(void)
-{
-    int option;
+	printf("\n\n Input your name: ");
+	scanf("%s", user.username);
 
-    printf("Press '1' to Register\nPress '2' to Login\n\n");
-    scanf_s("%d", &option);
-
-    getchar();           // catching newline.
-
-    if (option == 1)
-    {
-        system("CLS");
-        registration();
-    }
-
-    else if (option == 2)
-    {
-        system("CLS");
-        login();
-    }
-}
-
-void login(void)
-{
-    char username[30], password[20];
-    FILE* log;
-
-    log = fopen("login.txt", "r");
-    if (log == NULL)
-    {
-        fputs("Error at opening File!", stderr);
-        exit(1);
-    }
-
-    struct login l;
-
-    printf("\nPlease Enter your login credentials below\n\n");
-    printf("Username:  ");
-    fgets(username, 30, stdin);
-    printf("\nPassword: ");
-    printf("\n");
-    fgets(password, 20, stdin);
-
-    while (fread(&l, sizeof(l), 1, log))
-    {
-        if (strcmp(username, l.username) == 0 && strcmp(password, l.password) == 0)
-
-        {
-            printf("\nSuccessful Login\n");
-        }
-        else
-        {
-            printf("\nIncorrect Login Details\nPlease enter the correct credentials\n");
-        }
-    }
-
-    fclose(log);
-
-    return;
-}
-
-void registration(void)
-{
-    char firstname[15];
-    FILE* log;
-
-    log = fopen("login.txt", "w");
-    if (log == NULL)
-    {
-        fputs("Error at opening File!", stderr);
-        exit(1);
-    }
-
-    struct login l;
-
-    printf("\nWelcome to your online course provider. We need to enter some details for registration.\n\n");
-    printf("\nEnter First Name:\n");
-    scanf_s("%c", l.fname);
-    printf("\nEnter Surname:\n");
-    scanf_s("%s", l.lname);
-
-    printf("Thank you.\nNow please choose a username and password as credentials for system login.\nEnsure the username is no more than 30 characters long.\nEnsure your password is at least 8 characters long and contains lowercase, uppercase, numerical and special character values.\n");
-
-    printf("\nEnter Username:\n");
-    scanf_s("%s", l.username);
-    printf("\nEnter Password:\n");
-    scanf_s("%s", l.password);
+	printf("\n\n 1. RPS\n 2. HangMan \n 3. MineSweeper\n 0. Exit\n\n");
+	scanf("%d", &b);
 
 
-    fwrite(&l, sizeof(l), 1, log);
-    fclose(log);
+	switch (b)
+	{
+	case 1:
+		startRPSGame();
+		break;
 
-    printf("\nConfirming details...\n...\nWelcome, %s!\n\n", firstname);
-    printf("\nRegistration Successful!\n");
-    printf("Press any key to continue...");
-    getchar();
-    system("CLS");
-    login();
+	case 2:
+		startHangmanGame();
+		break;
+
+	case 3:
+		RunMineSweeper(&user);
+		break;
+
+	default:
+		break;
+	}
 }
