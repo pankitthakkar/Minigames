@@ -10,17 +10,46 @@
 
 //TODO for Integration / Main (Pankit): 
 	//
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "Minesweeper.h"
-#include "Main.h"
 
-int main(void) {
-	USER* testUser = (USER*) malloc(sizeof(USER));
-	strcpy_s(testUser->username,(sizeof(char)*9),"testName");
-	testUser->minesweeper_highscore = 10;
-	RunMineSweeper(testUser);
-	free(testUser);
-	return 0;
+
+#include <stdio.h>
+#include "Main.h"
+#include "HangMan.h"
+#include "RPS.h"
+#include "Minesweeper.h"
+
+int main()
+{
+	int b;
+	printf("Welcome");
+
+	USER user;
+	user.hangman_highscore = 0;
+	user.minesweeper_highscore = 0;
+	user.RPS_highscore = 0;
+
+	printf("\n\n Input your name: ");
+	scanf("%s", user.username);
+
+	printf("\n\n 1. RPS\n 2. HangMan \n 3. MineSweeper\n 0. Exit\n\n");
+	scanf("%d", &b);
+
+
+	switch (b)
+	{
+	case 1:
+		startRPSGame();
+		break;
+
+	case 2:
+		startHangmanGame();
+		break;
+
+	case 3:
+		RunMineSweeper(&user);
+		break;
+
+	default:
+		break;
+	}
 }
