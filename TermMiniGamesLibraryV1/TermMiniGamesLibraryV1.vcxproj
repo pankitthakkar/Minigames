@@ -145,6 +145,7 @@
     <ClInclude Include="RPS.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="HangMan.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="Minesweeper.c" />
   </ItemGroup>

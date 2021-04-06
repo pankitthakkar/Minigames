@@ -35,5 +35,8 @@
     <ClCompile Include="Minesweeper.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HangMan.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
