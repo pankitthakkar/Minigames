@@ -1,15 +1,53 @@
 #pragma once
 //Minesweeper header for tests / integration
+#include "Main.h"
+#include <stdbool.h>
+
+#define EASYSIZE 9	//got difficulties from wikipedia...
+#define EASYMINE 10
+
+#define MEDSIZE 16
+#define MEDMINE 40
+
+#define HARDSIZE 30
+#define HARDMINE 99
+
+#define MAXINPUT 30
+#define MINE -2
+#define UNINIT -1
+
+typedef struct MinesweeperBoard {
+	int rows;
+	int columns;
+
+	int numOfMines;
+	int currentMines;
+
+	int** currentBoard;
+	int** filledBoard;
+
+}MBoard;
+
+void startGame(USER* inputUser);//actual game called by runMineSweeper
+
 void RunMineSweeper(USER* inputUser);//this will be called in main and pass the user into it to save scores
 
-char** initalizeBoard(int XLength, int YLength);//initliaze board for new game
+MBoard initalizeBoard(int xWidth, int yHeight, int numOfMines);//initliaze board for new game
 
-char** updateBoard(char** inputBoard, char xCoord, int yCoord);//gets user choice, first goes to checkInput then updates and returns board
+void printCurrentBoard(MBoard printBoard); //top simplify job later on
 
-bool checkInput(char** currentBoard, char xCoord, int yCoord);//checks input compared to current board and returns new board
+void printFinalBoard(MBoard printBoard);
 
-int playerWin(USER* inputUser);//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
+int updateBoard(MBoard* currentBoard);//gets user choice, first goes to checkInput then updates and returns board
 
-int playerLose();//returns choice of 0 error, 1 continue, 2 exit
+int updateBoardStub(MBoard* testBoard, int testRow, int testColumn);
 
-int restartScreen();//restart screen seen after win or loss
+int checkInput(MBoard gameBoard,int inputRow, int inputColumn);//checks input compared to current board and returns new board
+
+void playerWin(USER* inputUser,int newScore);//updates user if socre is higher then returns choice of 0 error, 1 continue, 2 exit
+
+void playerLose(MBoard* deleteBoard);//returns choice of 0 error, 1 continue, 2 exit
+
+bool checkWin(MBoard inputBoard);
+
+void deleteMBoard(MBoard* inputBoard);
