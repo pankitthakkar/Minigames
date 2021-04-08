@@ -1,4 +1,17 @@
 #include "RPS.h"
+
+void main()
+{
+	printf("Welcome to Rock Paper Scissors Game!\n");
+
+	bool keepPlaying = true;
+
+	while (keepPlaying == true)
+	{
+		keepPlaying = startGame();
+	}
+
+}
 bool startGame()
 {
 	bool keepPlaying = true;
