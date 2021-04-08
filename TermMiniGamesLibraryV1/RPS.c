@@ -11,7 +11,7 @@ void main()
 		keepPlaying = startGame();
 	}
 
-}
+} 
 bool startGame()
 {
 	bool keepPlaying = true;
