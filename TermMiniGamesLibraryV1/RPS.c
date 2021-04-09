@@ -7,7 +7,7 @@ void main()
 	bool keepPlaying = true;
 
 	while (keepPlaying == true)
-	{
+	{ 
 		keepPlaying = startGame();
 	}
 
