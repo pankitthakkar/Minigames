@@ -33,7 +33,7 @@ int main()
 
 	printf("\n\n 1. RPS\n 2. HangMan \n 3. MineSweeper\n 0. Exit\n\n");
 	scanf("%d", &b);
-
+	char newline = getc(stdin);
 
 	switch (b)
 	{

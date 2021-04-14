@@ -6,7 +6,7 @@ bool startRPSGame()
 
 	//Get User Input
 	char input1[100];
-	printf("\nPlease enter your choice of word 'Rock', 'Paper', or 'Scissorr\n");
+	printf("\nPlease enter your choice of word 'Rock', 'Paper', or 'Scissor\n");
 	printf("Press '2' to Exit the Game\n");
 	printf("Choice: ");
 	strcpy(input1, getStringInput()); //get user input
