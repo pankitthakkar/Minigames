@@ -1,5 +1,5 @@
 #include "RPS.h"
-bool startGame()
+bool startRPSGame()
 {
 	bool keepPlaying = true;
 	srand(time(0));

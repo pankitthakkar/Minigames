@@ -19,7 +19,7 @@
 #define WORD_SIZE 20
 
 //Function Prototypes
-bool startGame();
+bool startRPSGame();
 void game(char* playerOne, char* playerTwo);
 void getRandomComputerInput(char* computerInput);
 void displayResult(char* computerChoice, char* result);
